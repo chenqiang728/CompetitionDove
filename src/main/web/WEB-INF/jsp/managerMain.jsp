@@ -6,23 +6,13 @@
     <title>Title</title>
 </head>
 <body>
-<%--固定在顶部--%>
-
-<nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container">
-        <div class="" align="center"><h1>欢迎进入后台管理系统</h1></div>
-    </div>
-</nav>
-
-
-
 <div class="container">
 
-
+    <div class="" align="center"><h1>欢迎进入后台管理系统</h1></div>
 
     <div class="row">
         <div class="col-lg-8 col-lg-offset-2">
-            <ul class="nav nav-pills <%--nav-stacked--%> ">
+            <ul class="nav nav-pills nav-stacked ">
                 <li role="presentation" class="active"><a href="#">主页</a></li>
 
                 <%--信息发布--%>
