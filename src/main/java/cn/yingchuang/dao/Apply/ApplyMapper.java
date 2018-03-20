@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface ApplyMapper {
 
-    //添加
+    //添加,,
     public int addApply(Apply apply);
 
     //查询所有
