@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.yingchuang.dao.Members.MembersMapper">
+
+    <resultMap id="membersMap" type="Members">
+        <id property="id" column="id"></id>
+        <result property="userName" column="userName"></result>
+        <result property="password" column="password"></result>
+        <result property="nickName" column="nickName"></result>
+        <result property="memberCode" column="memberCode"></result>
+        <association property="information" javaType="Information" resultMap="InformationMap"></association>
+    </resultMap>
+
+    <resultMap id="InformationMap" type="Information">
+        <id property="id" column="info_id"></id>
+        <result property="playerName" column="playerName"></result>
+        <result property="sex" column="sex"></result>
+        <result property="phoneNumber" column="phoneNumber"></result>
+        <result property="Email" column="Email"></result>
+        <result property="sick" column="sick"></result>
+        <result property="dangerName" column="dangerName"></result>
+        <result property="dangerPhone" column="dangerPhone"></result>
+        <result property="createDate" column="createDate"></result>
+        <result property="payStatus" column="payStatus"></result>
+    </resultMap>
+
+    <!--添加一条-->
+    <insert id="addMembers" parameterType="Members">
+        INSERT INTO members VALUE(NULL,#{userName},#{password},#{nickName},#{information.id},#{memberCode})
+    </insert>
+
+    <!--修改一条会员信息，members和information表要一起修改-->
+    <update id="updateMembersById" parameterType="Members">
+        UPDATE members m, information i SET userName=#{userName},PASSWORD=#{password},nickName=#{nickName},
+        playerName=#{information.playerName},sex=#{information.sex},
+        phoneNumber=#{information.phoneNumber},Email=#{information.email},
+        sick=#{information.sick},dangerName=#{information.dangerName},
+        dangerPhone=#{information.dangerPhone},createDATE=NOW()
+        WHERE m.informationId=i.id AND m.id=#{id}
+    </update>
+
+    <!--查询一条 ,在修改的时候要查询出一条记录显示在页面上，-->
+    <select id="queryMembersById" parameterType="integer" resultMap="membersMap">
+        SELECT m.userName,m.password,m.nickName,m.memberCode,
+        i.id i_id ,i.playerName,i.sex,i.phoneNumber,i.email,i.idNumber,i.sick,
+        i.dangerName,i.dangerPhone,i.createDATE,i.payStatus
+        FROM members m ,information i WHERE m.informationId=i.id AND m.id=6
+    </select>
+
+    <!--查询多条-->
+    <select id="queryAllMembers" resultMap="membersMap">
+        SELECT * FROM members order by
+    </select>
+
+    <!--模糊查询-->
+    <select id="queryFuzzy" resultMap="membersMap" parameterType="string">
+        SELECT DISTINCT m.id,m.userName,m.password,m.nickName,m.memberscode,i.playername,i.sex,i.phonenumber,
+            i.email,i.idNumber,i.sick,i.dangername,i.dangerphone,i.createdate,i.paystatus
+        FROM members m ,information i
+        WHERE m.informationid=i.id
+        AND ( m.id LIKE CONCAT('%',#{string},'%')
+        OR m.username LIKE CONCAT('%',#{string},'%')
+        OR m.password LIKE CONCAT('%',#{string},'%')
+        OR m.nickname LIKE CONCAT('%',#{string},'%')
+        OR i.playername LIKE CONCAT('%',#{string},'%')
+        OR i.sex LIKE CONCAT('%',#{string},'%')
+        OR i.phonenumber LIKE CONCAT('%',#{string},'%')
+        OR i.email LIKE CONCAT('%',#{string},'%')
+        OR i.idNumber LIKE CONCAT('%',#{string},'%')
+        OR i.sick LIKE CONCAT('%',#{string},'%')
+        OR i.dangername LIKE CONCAT('%',#{string},'%')
+        OR i.dangerphone LIKE CONCAT('%',#{string},'%')
+        OR i.createdate LIKE BINARY CONCAT('%',#{string},'%')
+        or m.memberscode like concat('%',#{string},'%'))
+    </select>
+
+</mapper>
